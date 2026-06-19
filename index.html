@@ -445,7 +445,7 @@ const CONFIG = [
 },
 {
   id:'s4', num:'四', title:'資料與通知', kicker:'Data & Notify',
-  desc:'通知寄送、資料治理與檔案處理等功能性全域決策——原清單常漏、值得補齊。',
+  desc:'通知寄送與資料治理等功能性全域決策——原清單常漏、值得補齊。',
   questions:[
     {group:'4-1　通知寄送'},
     {id:'noti-need',label:'是否需要系統通知',type:'radio',newItem:true,opts:[{v:'需要'},{v:'不需要'}]},
@@ -456,19 +456,19 @@ const CONFIG = [
     {id:'noti-when',label:'觸發情境',type:'text',newItem:true,showIf:a=>a['noti-need']==='需要',ph:'例：註冊、忘記密碼、審核結果、到期提醒'},
 
     {group:'4-2　資料治理'},
-    {id:'audit',label:'操作稽核軌跡 (audit log)',type:'radio',newItem:true,opts:[
-      {v:'需要',rec:true,reveal:{id:'audit-d',label:'記錄哪些動作',ph:'例：登入、新增／修改／刪除、匯出'}},{v:'不需要'}],
+    {id:'audit',label:'操作稽核軌跡 (audit log)',type:'radio',newItem:true,opts:[{v:'需要',rec:true},{v:'不需要'}],
       hint:'政府案幾乎都要求操作軌跡，建議預設「需要」。'},
+    {id:'audit-actions',label:'記錄哪些動作（可複選）',type:'multi',newItem:true,showIf:a=>a['audit']==='需要',opts:[
+      {v:'登入／登出',rec:true},{v:'新增',rec:true},{v:'修改',rec:true},{v:'刪除',rec:true},{v:'查詢／檢視'},{v:'匯出／下載'},{v:'審核／核可'},{v:'權限／帳號異動'}]},
+    {id:'audit-actions-o',label:'其他要記錄的動作',type:'text',optional:true,showIf:a=>a['audit']==='需要',ph:'其他（無則留空）'},
     {id:'retention',label:'資料保存期限 / 自動清除',type:'radio',newItem:true,opts:[
       {v:'有',reveal:{id:'retention-d',label:'期限',ph:'例：保存 3 年後封存'}},{v:'無'}]},
     {id:'export',label:'資料匯出',type:'radio',newItem:true,opts:[
       {v:'需要',reveal:{id:'export-d',label:'格式',ph:'例：Excel / CSV / PDF'}},{v:'不需要'}]},
-    {id:'pii',label:'個資 / 刪除權',type:'radio',newItem:true,opts:[
-      {v:'有個資',reveal:{id:'pii-d',label:'去識別／刪除機制',ph:''}},{v:'無'}]},
+    {id:'pii',label:'是否含個人資料（個資）',type:'radio',newItem:true,opts:[
+      {v:'有個資',reveal:{id:'pii-d',label:'去識別／刪除機制',ph:'例：當事人可申請刪除、定期去識別'}},{v:'無'}],
+      hint:'個資＝可識別特定個人的資料（姓名、身分證號、電話、Email、地址等）。若有，依個資法通常需提供「當事人可要求刪除（刪除權）」或去識別機制——這題即確認有沒有、以及怎麼做。'},
 
-    {group:'4-3　檔案處理'},
-    {id:'upload',label:'檔案上傳限制',type:'text',newItem:true,ph:'大小上限＿＿、格式＿＿',
-      hint:'除了大小與格式，建議一併確認是否需要上傳檔案病毒掃描。'},
   ]
 },
 {
@@ -486,21 +486,21 @@ const CONFIG = [
     {id:'pentest',label:'滲透測試',type:'radio',tech:true,opts:[
       {v:'不需要'},{v:'是',reveal:{id:'pentest-d',label:'頻率／檢測方',ph:'例：總驗收前一次'}}]},
     {id:'gov-baseline',label:'資通系統防護基準檢核表',type:'radio',tech:true,opts:[
-      {v:'不需要'},{v:'是',reveal:{id:'gov-lv',label:'等級',ph:'高 / 中 / 普'}}]},
+      {v:'不需要'},{v:'高'},{v:'中'},{v:'普'}]},
     {id:'custom-form',label:'客戶自有資安表單',type:'radio',tech:true,opts:[
       {v:'不需要'},{v:'是',reveal:{id:'custom-form-d',label:'表單名稱',ph:'例：資安管理作業自我評估表'}}]},
 
     {group:'5-2　連線與機房',tech:true},
     {id:'prod-env',label:'正式機 — 架設環境',type:'radio',tech:true,opts:[
-      {v:'客戶端機房'},{v:'鎰威端機房'},{v:'其他',reveal:{id:'prod-env-o',label:'說明',ph:'例：下包代管雲端機房'}}]},
+      {v:'客戶端機房'},{v:'公司內部機房'},{v:'其他',reveal:{id:'prod-env-o',label:'說明',ph:'例：下包代管雲端機房'}}]},
     {id:'prod-net',label:'正式機 — 連線設定',type:'radio',tech:true,opts:[{v:'外網公開'},{v:'僅開放內網'}]},
     {id:'prod-ssl',label:'正式機 — SSL 憑證',type:'radio',tech:true,opts:[{v:'是'},{v:'否'}]},
     {id:'test-cust',label:'客戶測試機',type:'radio',tech:true,opts:[
-      {v:'客戶端沒有測試機'},{v:'客戶端機房'},{v:'鎰威端機房'},{v:'其他',reveal:{id:'test-cust-o',label:'說明',ph:''}}]},
+      {v:'客戶端沒有測試機'},{v:'客戶端機房'},{v:'公司內部機房'},{v:'其他',reveal:{id:'test-cust-o',label:'說明',ph:''}}]},
     {id:'test-cust-net',label:'客戶測試機 — 連線',type:'radio',tech:true,showIf:a=>a['test-cust']&&a['test-cust']!=='客戶端沒有測試機',opts:[{v:'外網公開'},{v:'僅開放內網'}]},
-    {id:'ewill-env',label:'鎰威測試機 — 架設環境',type:'radio',tech:true,opts:[
-      {v:'客戶端機房'},{v:'鎰威端機房'},{v:'其他',reveal:{id:'ewill-env-o',label:'說明',ph:''}}]},
-    {id:'ewill-net',label:'鎰威測試機 — 連線',type:'radio',tech:true,opts:[{v:'外網公開'},{v:'僅開放內網'}]},
+    {id:'ewill-env',label:'公司內部測試機 — 架設環境',type:'radio',tech:true,opts:[
+      {v:'客戶端機房'},{v:'公司內部機房'},{v:'其他',reveal:{id:'ewill-env-o',label:'說明',ph:''}}]},
+    {id:'ewill-net',label:'公司內部測試機 — 連線',type:'radio',tech:true,opts:[{v:'外網公開'},{v:'僅開放內網'}]},
     {id:'backup',label:'是否有備份機制',type:'radio',tech:true,opts:[{v:'是'},{v:'否'}],
       hint:'<b>備份 ≠ 備援，兩者互補。</b>'
         +'<br><b>備份 (Backup)</b>：定期複製資料另存，出事後可「還原」到某個時間點——救的是<b>資料不遺失</b>，但還原需要時間、過程中服務會中斷。'
@@ -511,7 +511,9 @@ const CONFIG = [
     {id:'fe',label:'前端',type:'radio',tech:true,opts:[{v:'Vue 3'},{v:'其他',reveal:{id:'fe-o',label:'說明',ph:''}}]},
     {id:'be',label:'後端',type:'radio',tech:true,opts:[{v:'.NET Core'},{v:'其他',reveal:{id:'be-o',label:'說明',ph:''}}]},
     {id:'db',label:'資料庫',type:'radio',tech:true,opts:[{v:'MSSQL'},{v:'MySQL'},{v:'其他',reveal:{id:'db-o',label:'說明',ph:''}}]},
-    {id:'uilib',label:'UI 庫',type:'radio',tech:true,opts:[{v:'Ewill Guideline – Vuetify'},{v:'客戶／合作廠商自訂',reveal:{id:'uilib-o',label:'說明',ph:'例：Shadcn'}}]},
+    {id:'uilib',label:'UI 庫',type:'radio',tech:true,opts:[
+      {v:'Vuetify'},{v:'Element Plus'},{v:'Ant Design'},{v:'Tailwind CSS'},{v:'Bootstrap'},{v:'shadcn/ui'},
+      {v:'公司自訂'},{v:'客戶／合作廠商自訂',reveal:{id:'uilib-o',label:'說明',ph:'例：PrimeVue、Naive UI'}}]},
     {id:'deploy',label:'部署方式',type:'radio',tech:true,opts:[{v:'VM 部署'},{v:'Docker'},{v:'K8s'},{v:'其他',reveal:{id:'deploy-o',label:'說明',ph:''}}]},
     {id:'vcs',label:'版控',type:'radio',tech:true,opts:[{v:'GitLab'},{v:'其他',reveal:{id:'vcs-o',label:'說明',ph:''}}]},
   ]
