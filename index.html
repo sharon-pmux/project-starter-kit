@@ -472,8 +472,8 @@ const CONFIG = [
   ]
 },
 {
-  id:'s5', num:'五', title:'技術、資安與部署', kicker:'Infrastructure', tech:true,
-  desc:'技術選型、資安檢測與機房部署，多由工程／合約決定。關掉上方「技術題 🔧」開關可整關隱藏。',
+  id:'s5', num:'五', title:'資安與部署', kicker:'Security & Infra', tech:true,
+  desc:'資安檢測與機房部署，多由工程／合約決定。關掉上方「技術題 🔧」開關可整關隱藏。',
   questions:[
     {group:'5-1　資安檢測報告',tech:true},
     {id:'src-scan',label:'原始碼檢測',type:'radio',tech:true,opts:[
@@ -507,7 +507,12 @@ const CONFIG = [
         +'<br><b>備援 (Failover)</b>：另備一套可即時接手的主機／環境，主機故障時自動切換——救的是<b>服務不中斷</b>。'},
     {id:'failover',label:'是否有備援機制',type:'radio',tech:true,opts:[{v:'是'},{v:'否'}]},
 
-    {group:'5-3　開發環境',tech:true},
+  ]
+},
+{
+  id:'s6', num:'六', title:'開發環境', kicker:'Stack', tech:true,
+  desc:'前端、後端、資料庫等技術選型，由工程主導。關掉上方「技術題 🔧」開關可整關隱藏。',
+  questions:[
     {id:'fe',label:'前端',type:'radio',tech:true,opts:[{v:'Vue 3'},{v:'其他',reveal:{id:'fe-o',label:'說明',ph:''}}]},
     {id:'be',label:'後端',type:'radio',tech:true,opts:[{v:'.NET Core'},{v:'其他',reveal:{id:'be-o',label:'說明',ph:''}}]},
     {id:'db',label:'資料庫',type:'radio',tech:true,opts:[{v:'MSSQL'},{v:'MySQL'},{v:'其他',reveal:{id:'db-o',label:'說明',ph:''}}]},
