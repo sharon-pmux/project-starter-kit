@@ -261,8 +261,50 @@ body::before{
 .intro-credit a{font-family:"DM Mono";color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-wash);transition:.15s}
 .intro-credit a:hover{border-bottom-color:var(--accent)}
 </style>
+<!-- Google Analytics (GA4) + Consent Mode -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZWHY7J7VB6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  // 預設一律拒絕，按「同意」前不種 cookie、不送資料
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+  // 若使用者先前已同意，套用已存選擇
+  try{ if(localStorage.getItem('ga_consent')==='granted'){
+    gtag('consent','update',{'analytics_storage':'granted'});
+  } }catch(e){}
+  gtag('js', new Date());
+  gtag('config', 'G-ZWHY7J7VB6');
+</script>
 </head>
 <body>
+
+<style>
+#cookieBar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(140%);
+  z-index:9999;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;
+  max-width:min(620px,calc(100vw - 24px));padding:13px 18px;background:var(--paper);
+  border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  font-size:13px;color:var(--ink);line-height:1.5;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+#cookieBar.show{transform:translateX(-50%) translateY(0)}
+#cookieBar .ck-txt{flex:1 1 240px;min-width:0;color:var(--ink-soft)}
+#cookieBar .ck-txt a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-wash)}
+#cookieBar .ck-btns{display:flex;gap:8px;flex-shrink:0}
+#cookieBar button{cursor:pointer;font-family:inherit;font-size:12.5px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink-soft);transition:.15s}
+#cookieBar button:hover{border-color:var(--accent)}
+#cookieBar button.ck-accept{background:var(--ink);color:#fff;border-color:var(--ink)}
+#cookieBar button.ck-accept:hover{background:var(--accent);border-color:var(--accent)}
+</style>
+<div id="cookieBar" role="dialog" aria-label="Cookie 同意">
+  <span class="ck-txt">本站使用 Google Analytics 匿名了解使用情況（瀏覽、複製、下載）。按「同意」前不會種 cookie。</span>
+  <span class="ck-btns">
+    <button type="button" class="ck-decline" id="ckDecline">拒絕</button>
+    <button type="button" class="ck-accept" id="ckAccept">同意</button>
+  </span>
+</div>
 
 <div class="intro" id="intro">
   <div class="intro-card">
@@ -882,9 +924,11 @@ document.getElementById('techToggle').onclick=function(){
   showTech=!showTech;this.classList.toggle('on',showTech);renderAll();
 };
 document.getElementById('copyBtn').onclick=()=>{
+  if(window.gtag)gtag('event','copy_md');
   navigator.clipboard.writeText(genMarkdown()).then(()=>toast('已複製 Markdown 到剪貼簿'));
 };
 document.getElementById('dlBtn').onclick=()=>{
+  if(window.gtag)gtag('event','download_md');
   const blob=new Blob([genMarkdown()],{type:'text/markdown;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='專案規格決策表.md';a.click();
   toast('已下載 專案規格決策表.md');
@@ -914,6 +958,20 @@ Object.entries(PRESET.defaults).forEach(([id,v])=>{if(A[id]===undefined)A[id]=v;
 document.getElementById('techToggle').classList.toggle('on',showTech);
 renderAll();
 if(!localStorage.getItem(SEEN))introEl.classList.add('show');  // 首次進站才顯示開場頁
+
+/* cookie 同意橫幅 */
+(function(){
+  const bar=document.getElementById('cookieBar');
+  let choice;try{choice=localStorage.getItem('ga_consent');}catch(e){}
+  if(!choice){setTimeout(()=>bar.classList.add('show'),600);}  // 尚未選擇才顯示
+  function decide(v){
+    try{localStorage.setItem('ga_consent',v);}catch(e){}
+    if(v==='granted'&&window.gtag)gtag('consent','update',{'analytics_storage':'granted'});
+    bar.classList.remove('show');
+  }
+  document.getElementById('ckAccept').onclick=()=>decide('granted');
+  document.getElementById('ckDecline').onclick=()=>decide('denied');
+})();
 </script>
 </body>
 </html>
