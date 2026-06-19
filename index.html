@@ -423,17 +423,21 @@ const CONFIG = [
     {group:'3-5　Token / Session'},
     {id:'token-exp',label:'Token 效期',type:'radio',opts:[
       {v:'1hr'},{v:'8hr'},{v:'24hr'},{v:'7 天'},{v:'其他',reveal:{id:'token-exp-o',label:'效期',ph:'例：30 分鐘'}}]},
-    {id:'token-refresh',label:'Token 更新',type:'radio',opts:[{v:'是'},{v:'否'}]},
-    {id:'keep-login',label:'關閉瀏覽器是否保持登入',type:'radio',opts:[{v:'是'},{v:'否'}]},
-    {id:'multi-tab',label:'同瀏覽器允許分頁登入不同帳號',type:'radio',opts:[{v:'是'},{v:'否'}]},
-    {id:'single-session',label:'同一帳號是否限制單一登入',type:'radio',newItem:true,opts:[
-      {v:'是（新登入踢掉舊的）'},{v:'否'}]},
+    {id:'token-refresh',label:'Token 更新',type:'radio',opts:[{v:'是'},{v:'否'}],
+      hint:'<b>Token＝登入成功後系統發給瀏覽器的「通行證」</b>，之後每次操作都靠它證明「已登入」。'
+        +'<br><b>效期</b>＝這張通行證多久過期；過期後使用者需重新登入。'
+        +'<br><b>Token 更新</b>＝是否在快到期時自動換一張新的，讓使用者持續操作時不會突然被登出（效期短＋自動更新，兼顧安全與體驗）。'},
     {id:'token-check',label:'Token 失效檢查方案（可複選）',type:'multi',opts:[
       {v:'一段時間主動檢查'},{v:'動作檢查（點按鈕／選單／麵包屑）'},{v:'進入頁面檢查（含直接貼網址）'}],
       hint:'三者可單用或併用（常見：動作檢查＋進入頁面檢查）。'
         +'<br><b>一段時間主動檢查</b>（輪詢）：每隔幾秒打 API 確認，最即時，但會持續產生請求、較耗資源。'
         +'<br><b>動作檢查</b>：使用者點按鈕／選單時才檢查，省資源；但純閒置時不會即時發現失效。'
         +'<br><b>進入頁面檢查</b>：換頁或直接貼網址進入時檢查，最省；但一直停在同一頁不會察覺已失效。'},
+    {id:'keep-login',label:'關閉瀏覽器是否保持登入',type:'radio',opts:[{v:'是'},{v:'否'}]},
+    {id:'multi-tab',label:'同瀏覽器允許分頁登入不同帳號',type:'radio',opts:[{v:'是'},{v:'否'}]},
+    {id:'single-session',label:'同一帳號是否限制單一登入',type:'radio',newItem:true,opts:[
+      {v:'是（新登入踢掉舊的）'},{v:'否'}],
+      hint:'同一組帳號能不能<b>同時在多個裝置／瀏覽器登入</b>。選「是」＝只能一處，他處登入會把前一個強制登出；選「否」＝可多處同時登入。常用於防止帳號共用或高安系統。'},
     {id:'logout-reset',label:'自動登出倒數重置行為（可複選）',type:'multi',opts:[
       {v:'click 點擊',rec:true},{v:'contextmenu 右鍵',rec:true},{v:'keydown 按鍵',rec:true},{v:'mousemove 游標移動'},{v:'scroll 捲軸'}],
       hint:'mousemove 與 scroll 觸發極頻繁，可能造成效能問題；一般建議只開 click／contextmenu／keydown。'},
